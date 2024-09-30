@@ -9,7 +9,7 @@ int[][] ckGrid = {{0,1,0,1,0,1,0,1},
 
 boolean isClicked = false;
 
-int checkRow,checkCol,saveCol,saveRow;
+int checkRow,checkCol,saveCol,saveRow,saveColred,saveRowred,saveColblue,saveRowblue;
 String direct ;
 
 void setup(){
@@ -63,6 +63,9 @@ void selectCk(){
   int j = checkRow;
   int forCal2_red = 2;
   int forCal2_blue = 2;
+  
+  
+  if(isClicked){
   if (ckGrid[i][j] == 1){
    noFill();
    strokeWeight(5);
@@ -118,8 +121,10 @@ void selectCk(){
          }
        }
      
+    }
    }
-  }
+   
+  }else{
   
   
   if (ckGrid[i][j] == 2){
@@ -137,7 +142,7 @@ void selectCk(){
       saveRow = j;     
      }else{
        if (ckGrid[i-1][j-1] == 1){
-         println(i,j);
+         
         if (i-2 >= 0 && j-2 >= 0){
         if (ckGrid[i-forCal2_blue][j-forCal2_blue] == 0){
           fill(255,0,0,200);
@@ -160,8 +165,8 @@ void selectCk(){
       
      }else{
        if (ckGrid[i-1][j+1] == 1){
-         if (i-2 >= 0){
-        if (ckGrid[i-forCal2_blue][j+2] == 0){
+         if (i-2 >= 0 && j+2 < 8){
+        if (ckGrid[i-forCal2_blue][j+forCal2_blue] == 0){
           fill(255,0,0,200);
           square((j*100)+100,(i*100)-100,100);
           fill(0,255,0,100);
@@ -173,69 +178,130 @@ void selectCk(){
        }
        
      }
+    } 
    } 
   }
   
+  
   if (ckGrid[i][j] == 0){
-   
-     if (ckGrid[saveCol][saveRow] == 1){
-     if (i - saveCol == 1 && saveRow - j == 1){
-      ckGrid[saveCol][saveRow] = 0;
-      ckGrid[i][j] = 1;
-     }
-     if(i - saveCol == 1 && j - saveRow == 1){
-      ckGrid[saveCol][saveRow] = 0;
-      ckGrid[i][j] = 1;
-     }
-     
-     if(ckGrid[saveCol+1][saveRow+1] == 2){
-       
-       ckGrid[saveCol][saveRow] = 0;
-       ckGrid[saveCol+2][saveRow+2] = 1;
-       ckGrid[saveCol+1][saveRow+1] = 0;
-       
-     }
+  
+   if(ckGrid[saveCol][saveRow] == 1){
+    if(saveCol + 1 == i && saveRow + 1 == j){
+     ckGrid[i][j] = 1;
+     ckGrid[saveCol][saveRow] = 0;
+     isClicked = false;
+
+    }
+    if(saveCol + 1 == i && saveRow - 1 == j){
+     ckGrid[i][j] = 1;
+     ckGrid[saveCol][saveRow] = 0;
+     isClicked = false;
+    }
     
-     if(ckGrid[saveCol+1][saveRow-1] == 2){
-       
-       ckGrid[saveCol][saveRow] = 0;
-       ckGrid[saveCol+2][saveRow-2] = 1;
-       ckGrid[saveCol+1][saveRow-1] = 0;
-       
+    //red eat
+   
+   if(i-2 >= 0 && j - 2 >= 0){ 
+    if (ckGrid[i-2][j-2] == 1){
+     if(ckGrid[i-1][j-1] == 2){
+      ckGrid[i][j] = 1;
+      ckGrid[saveCol+1][saveRow+1] = 0;
+      ckGrid[saveCol][saveRow] = 0;
+      isClicked = false;
      }
     }
-         
-    
-    if (ckGrid[saveCol][saveRow] == 2){
-     if (saveCol - i == 1 && saveRow - j == 1 ){
-      ckGrid[saveCol][saveRow] = 0;
-      ckGrid[i][j] = 2;
-     }
-     if(saveCol - i == 1 && j - saveRow == 1){
-       
-      ckGrid[saveCol][saveRow] = 0;
-      ckGrid[i][j] = 2;
-     }
-     
-     if(ckGrid[saveCol-1][saveRow-1] == 1){
-      
-      ckGrid[saveCol][saveRow] = 0;
-      ckGrid[saveCol-1][saveRow - 1] = 0;
-      ckGrid[saveCol-2][saveRow - 2] = 2;
-       
-     }
-     
-     if(ckGrid[saveCol-1][saveRow+1] == 1){
-       ckGrid[saveCol][saveRow] = 0;
-       ckGrid[saveCol-1][saveRow + 1] = 0;
-       ckGrid[saveCol-2][saveRow + 2] = 2;
-       }
-     
+   }else{
+    saveColred = i;
+    saveRowred = j;
    }
- }
+   if(i - 2 >= 0 && j + 2 < 8){
+   if(ckGrid[i-2][j+2] == 1){
+    if(ckGrid[i-1][j+1] == 2){
+     ckGrid[i][j] = 1;
+     ckGrid[i-1][j+1] = 0;
+     ckGrid[i-2][j+2] = 0;
+     isClicked = false;
+     }
+    }
+   }else{
+    saveColred = i;
+    saveRowred = j;
+   }
+  }
+  
+  // if red are negative
+  if(i - 2 == saveColred && j - 2 == saveRowred){
+     ckGrid[i-2][j-2] = 0;
+     ckGrid[i][j] = 1;
+     ckGrid[i-1][j-1] = 0;
+     isClicked = false;
+   }
+  if(i-2 == saveColred && j + 2 == saveRowred){
+     ckGrid[i-2][j+2] = 0;
+     ckGrid[i][j] = 1;
+     ckGrid[i-1][j+1] = 0;
+     isClicked = false;    
+  }
+  
+   //blue
+   if(ckGrid[saveCol][saveRow] == 2){
+    if(saveCol - 1 == i && saveRow - 1 == j){
+     ckGrid[i][j] = 2;
+     ckGrid[saveCol][saveRow] = 0;
+     isClicked = true;
 
-}  
+    }
+    if(saveCol - 1 == i && saveRow + 1 == j){
+     ckGrid[i][j] = 2;
+     ckGrid[saveCol][saveRow] = 0;
+     isClicked = true;
 
+    }
+    if(i + 2 < 8 && j - 2 >= 0){
+      if(ckGrid[i+2][j-2] == 2){  //right
+       if(ckGrid[i+1][j-1] == 1){
+        ckGrid[i][j] = 2;
+        ckGrid[i+1][j-1] = 0;
+        ckGrid[i+2][j-2] = 0;
+        isClicked = true;
+      }
+     }
+    }else{
+     saveColblue = i;
+     saveRowblue = j;
+    }
+    if( i + 2 < 8 && j + 2 < 8){
+     if(ckGrid[i+2][j+2] == 2){
+      if(ckGrid[i+1][j+1] == 1){
+       ckGrid[i][j] = 2;
+       ckGrid[i+1][j+1] = 0;
+       ckGrid[i+2][j+2] = 0;
+       isClicked = true;
+      }
+     }
+    }else{
+     saveColblue = i;
+     saveRowblue = j;      
+    }
+    
+   }
+   
+   //if blue are negative
+   
+   if(i + 2 == saveColblue && j + 2 == saveRowblue ){
+    ckGrid[i][j] = 2;
+    ckGrid[i+1][j+1] = 0;
+    ckGrid[i+2][j+2] = 0;
+    isClicked = true;
+   }
+   
+   if(i + 2 == saveColblue && j - 2 == saveRowblue){
+    ckGrid[i][j] = 2;
+    ckGrid[i+1][j-1] = 0;
+    ckGrid[i+2][j-2] = 0;
+    isClicked = true;
+   }  
+  }
+}
 
 
 
@@ -250,18 +316,6 @@ void draw(){
 void mousePressed(){
   checkCol = mouseY/100;
   checkRow = mouseX/100;
+
   
-  
-  println(checkCol,checkRow);
-  
-  
-  if (isClicked){
-    isClicked = false;
-    
-    
-  }else{
-    
-   isClicked = true; 
-  
-  }  
 }
