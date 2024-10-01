@@ -44,20 +44,27 @@ void drawChecker(){
   for (int i = 0; i < row; i++){
     for (int j = 0; j < col; j++){
     if (ckGrid[i][j] == 1){
+      noStroke();
      fill(255,0,0); 
      circle(50+(j*100),50+(i*100),100*ckGrid[i][j]);
     }
     if (ckGrid[i][j] == 2){
+     noStroke();
      fill(0,0,255); 
      circle(50+(j*100),50+(i*100),50*ckGrid[i][j]);
     }
     if (ckGrid[i][j] == 4){
-     fill(135,206,235);
-     circle(50+(j*100),50+(i*100),25*ckGrid[i][j]);
+     strokeWeight(5);
+     fill(0,0,255);
+     stroke(#090088);
+     circle(40+(j*100),60+(i*100),20*ckGrid[i][j]);
+     circle(60+(j*100),40+(i*100),20*ckGrid[i][j]);
     }
     if(ckGrid[i][j] == 3){
-     fill(255,165,0);
-     circle(50+(j*100),50+(i*100),33*ckGrid[i][j]);
+     stroke(#990000);
+     fill(255,0,0);
+     circle(40+(j*100),60+(i*100),27*ckGrid[i][j]);
+     circle(60+(j*100),40+(i*100),27*ckGrid[i][j]);
     }
      
       }
@@ -72,9 +79,13 @@ void selectCk(){
   int forCal2_red = 2;
   int forCal2_blue = 2;
   
-  
+  //red zone
   if(isClicked){
+    
   if (ckGrid[i][j] == 1){
+   saveCol = i;
+   saveRow = j;
+   
    noFill();
    strokeWeight(5);
    stroke(0,255,0);
@@ -87,8 +98,6 @@ void selectCk(){
      
      if (ckGrid[i+1][j-1] == 0){
        square((j*100)-100,(i*100)+100,100);
-       saveCol = i;
-       saveRow = j;
        
      }else{
        
@@ -110,8 +119,6 @@ void selectCk(){
    if (j+1 < 8 && i+1 < 8){
     if (ckGrid[i+1][j+1] == 0){
      square((j*100)+100,(i*100)+100,100);
-      saveCol = i;
-      saveRow = j;
       
      }else{
       
@@ -133,18 +140,87 @@ void selectCk(){
    }
    
    if(ckGrid[i][j] == 3){
+     
+    saveCol = i;
+    saveRow = j; 
     noFill();
     strokeWeight(5);
-    stroke(#8B0000);
-    circle(50+(j*100),50+(i*100),33*ckGrid[i][j]);
-    noStroke();
-    fill(0,255,0,100); 
+    stroke(0,255,0);
+    circle(40+(j*100),60+(i*100),27*ckGrid[i][j]);
+    circle(60+(j*100),40+(i*100),27*ckGrid[i][j]);
+    
+      
+     for(int l = 1; l < height/100 ; l++){
+      fill(0,255,0,100);
+      noStroke();
+      square((j*100)-100*l,(i*100)-100*l,100);
+      
+      if(i - l >= 0 && j - l >= 0){
+       if(ckGrid[i-l][j-l] == 2){
+        fill(255,0,0,150);
+        square((j*100)-100*l,(i*100)-100*l,100);
+        
+       }
+       
+      }
+     }
+    
+    
+     for(int r = 1; r < height/100; r++){  
+      
+      fill(0,255,0,100);
+      square((j*100)+100*r,(i*100)-100*r,100); 
+      
+      if(i - r >= 0 && j + r < 8){
+       if(ckGrid[i-r][j+r] == 2){
+        
+        fill(255,0,0,150);
+        square((j*100)+100*r,(i*100)-100*r,100);
+       }
+       
+      }
+     }
+     
+     for(int r = 1; r < height/100; r++){  
+       
+      fill(0,255,0,100);
+      square((j*100)+100*r,(i*100)+100*r,100); 
+      
+      if(i + r < 8 && j + r < 8){
+       if(ckGrid[i+r][j+r] == 2){
+        
+        fill(255,0,0,150);
+        square((j*100)+100*r,(i*100)+100*r,100);
+       }
+       
+      }
+     }
+     
+     for(int r = 1; r < height/100; r++){  
+       
+      fill(0,255,0,100);
+      square((j*100)-100*r,(i*100)+100*r,100); 
+      
+      if(i + r < 8 && j - r >= 0){
+       if(ckGrid[i+r][j-r] == 2){
+       
+        fill(255,0,0,150);
+        square((j*100)-100*r,(i*100)+100*r,100);
+       }
+       
+      }
+     }  
+
    }
    
+   
+  //blue zone
   }else{
   
   
   if (ckGrid[i][j] == 2){
+   saveCol = i;
+   saveRow = j; 
    noFill();
    strokeWeight(5);
    stroke(0,255,0);
@@ -155,8 +231,7 @@ void selectCk(){
    if(j-1 >= 0 && i-1 >= 0){
      if (ckGrid[i-1][j-1] == 0){
       square((j*100)-100,(i*100)-100,100);
-      saveCol = i;
-      saveRow = j;     
+    
      }else{
        if (ckGrid[i-1][j-1] == 1){
          
@@ -177,8 +252,6 @@ void selectCk(){
    if (j+1 < 8 && i-1 >= 0){
      if (ckGrid[i-1][j+1] == 0){
       square((j*100)+100,(i*100)-100,100);
-      saveCol = i;
-      saveRow = j;
       
      }else{
        if (ckGrid[i-1][j+1] == 1){
@@ -196,6 +269,53 @@ void selectCk(){
        
      }
     } 
+   }
+   
+   //blue ulti
+   if(ckGrid[i][j] == 4){
+    saveCol = i;
+    saveRow = j; 
+    
+    noFill();
+    strokeWeight(5);
+    stroke(0,255,0);
+    circle(40+(j*100),60+(i*100),20*ckGrid[i][j]);
+    circle(60+(j*100),40+(i*100),20*ckGrid[i][j]);
+    
+    for(int l = 1; l < height/100; l++){  
+      noStroke();
+      fill(0,255,0,100);
+      square((j*100)+100*l,(i*100)+100*l,100);
+      square((j*100)+100*l,(i*100)-100*l,100);
+      square((j*100)-100*l,(i*100)+100*l,100);
+      square((j*100)-100*l,(i*100)-100*l,100);
+      
+     if(i + l < 8 && j + l < 8){
+       fill(255,0,0,200);
+      if(ckGrid[i+l][j+l] == 1){
+        square((j*100)+100*l,(i*100)+100*l,100);
+      }
+     }
+     if(i + l < 8 && j - l >= 0){
+      if(ckGrid[i+l][j-l] == 1){
+        
+        square((j*100)-100*l,(i*100)+100*l,100);
+      }
+     }
+     if(i - l >= 0 && j + l < 8){
+      if(ckGrid[i-l][j+l] == 1){
+        
+        square((j*100)+100*l,(i*100)-100*l,100);
+      }
+     }
+     if(i - l >= 0 && j - l >= 0){
+      if(ckGrid[i-l][j-l] == 1){
+        
+        square((j*100)-100*l,(i*100)-100*l,100);
+      }
+     }
+    }
+     
    }
    
   }
@@ -340,6 +460,11 @@ void selectCk(){
    ckGrid[7][6] = 3; 
   }
   
+  //ulti red move
+  if(ckGrid[saveCol][saveRow] == 3){
+    
+    
+   }
  
 }
 
