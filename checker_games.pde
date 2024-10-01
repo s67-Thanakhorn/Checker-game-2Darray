@@ -51,6 +51,14 @@ void drawChecker(){
      fill(0,0,255); 
      circle(50+(j*100),50+(i*100),50*ckGrid[i][j]);
     }
+    if (ckGrid[i][j] == 4){
+     fill(135,206,235);
+     circle(50+(j*100),50+(i*100),25*ckGrid[i][j]);
+    }
+    if(ckGrid[i][j] == 3){
+     fill(255,165,0);
+     circle(50+(j*100),50+(i*100),33*ckGrid[i][j]);
+    }
      
       }
       
@@ -124,6 +132,15 @@ void selectCk(){
     }
    }
    
+   if(ckGrid[i][j] == 3){
+    noFill();
+    strokeWeight(5);
+    stroke(#8B0000);
+    circle(50+(j*100),50+(i*100),33*ckGrid[i][j]);
+    noStroke();
+    fill(0,255,0,100); 
+   }
+   
   }else{
   
   
@@ -179,7 +196,8 @@ void selectCk(){
        
      }
     } 
-   } 
+   }
+   
   }
   
   
@@ -301,12 +319,34 @@ void selectCk(){
     isClicked = true;
    }  
   }
+  
+  if (ckGrid[0][1] == 2){
+   ckGrid[0][1] = 4 ; 
+  }else if(ckGrid[0][3] == 2){
+    ckGrid[0][3] = 4;
+  }else if(ckGrid[0][5] == 2){
+   ckGrid[0][5] = 4; 
+  }else if(ckGrid[0][7] == 2){
+   ckGrid[0][7] = 4; 
+  }
+  
+  if(ckGrid[7][0] == 1){
+   ckGrid[7][0] = 3;
+  }else if(ckGrid[7][2] == 1){
+   ckGrid[7][2] = 3; 
+  }else if(ckGrid[7][4] == 1){
+   ckGrid[7][4] = 3; 
+  }else if(ckGrid[7][6] == 1){
+   ckGrid[7][6] = 3; 
+  }
+  
+ 
 }
 
 
 
 void draw(){
- 
+  
   background(0);
   drawBoard();
   drawChecker();
