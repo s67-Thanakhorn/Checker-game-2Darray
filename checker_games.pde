@@ -3,7 +3,7 @@ int[][] ckGrid = {{0,1,0,1,0,1,0,1},
                   {0,0,0,0,0,0,0,0},
                   {0,0,0,0,0,0,0,0},
                   {0,0,0,0,0,0,0,0},
-                  {0,0,3,0,0,0,0,0},
+                  {0,0,0,0,0,0,0,0},
                   {0,2,0,2,0,2,0,2},
                   {2,0,2,0,2,0,2,0}};
 
@@ -101,7 +101,7 @@ void selectCk(){
        
      }else{
        
-      if (ckGrid[i+1][j-1] == 2){                      
+      if (ckGrid[i+1][j-1] == 2 || ckGrid[i+1][j-1] == 4){                      
          if (i + 2 < 8 && j - 2 >= 0){
           if (ckGrid[i+2][j-2] == 0){
              
@@ -122,7 +122,7 @@ void selectCk(){
       
      }else{
       
-        if (ckGrid[i+1][j+1] == 2){
+        if (ckGrid[i+1][j+1] == 2 || ckGrid[i+1][j+1] == 4){
           if (i+2 < 8 && j+2 < 8){
           if (ckGrid[i+forCal2_red][j+forCal2_red] == 0){
             fill(255,0,0,150);
@@ -154,7 +154,7 @@ void selectCk(){
      for(int l = 1; l < height/100 ; l++){ // left up
      
      if(saveCol - l >= 0 && saveRow - l >= 0 ){
-     if(ckGrid[saveCol-l][saveRow-l] != 1 && ckGrid[saveCol-l][saveRow-l] != 3 && ckGrid[saveCol-l][saveRow-l] != 4){
+     if(ckGrid[saveCol-l][saveRow-l] != 1 && ckGrid[saveCol-l][saveRow-l] != 3 ){
       fill(0,255,0,100);
       noStroke();
       square((j*100)-100*l,(i*100)-100*l,100);
@@ -174,7 +174,7 @@ void selectCk(){
     
      for(int r = 1; r < height/100; r++){ //right up
       if(saveCol - r >= 0 && saveRow + r < 8 ){
-       if(ckGrid[saveCol-r][saveRow+r] != 1 && ckGrid[saveCol-r][saveRow+r] != 3 && ckGrid[saveCol-r][saveRow+r] != 4){
+       if(ckGrid[saveCol-r][saveRow+r] != 1 && ckGrid[saveCol-r][saveRow+r] != 3 ){
          noStroke();
         fill(0,255,0,100);
         square((j*100)+100*r,(i*100)-100*r,100); 
@@ -193,7 +193,7 @@ void selectCk(){
      
      for(int r = 1; r < height/100; r++){ // right down
       if(saveCol + r < 8 && saveRow + r < 8 ){
-       if(ckGrid[saveCol+r][saveRow+r] != 1 && ckGrid[saveCol+r][saveRow+r] != 3 && ckGrid[saveCol+r][saveRow+r] != 4){ 
+       if(ckGrid[saveCol+r][saveRow+r] != 1 && ckGrid[saveCol+r][saveRow+r] != 3 ){ 
         noStroke();
         fill(0,255,0,100);
         square((j*100)+100*r,(i*100)+100*r,100); 
@@ -212,8 +212,8 @@ void selectCk(){
      
      for(int r = 1; r < height/100; r++){  // left down
      
-     if(saveCol + r < 8 && saveRow - r >= 0){
-      if(ckGrid[saveCol+r][saveRow-r] != 1 && ckGrid[saveCol+r][saveRow-r] != 3 && ckGrid[saveCol+r][saveRow-r] != 4){  
+     if(saveCol + r < 8 && saveRow - r >= 0 ){
+      if(ckGrid[saveCol+r][saveRow-r] != 1 && ckGrid[saveCol+r][saveRow-r] != 3 ){  
         noStroke();
        fill(0,255,0,100);
        square((j*100)-100*r,(i*100)+100*r,100); 
@@ -251,7 +251,7 @@ void selectCk(){
       square((j*100)-100,(i*100)-100,100);
     
      }else{
-       if (ckGrid[i-1][j-1] == 1){
+       if (ckGrid[i-1][j-1] == 1|| ckGrid[i-1][j-1] == 3){
          
         if (i-2 >= 0 && j-2 >= 0){
         if (ckGrid[i-forCal2_blue][j-forCal2_blue] == 0){
@@ -272,7 +272,7 @@ void selectCk(){
       square((j*100)+100,(i*100)-100,100);
       
      }else{
-       if (ckGrid[i-1][j+1] == 1){
+       if (ckGrid[i-1][j+1] == 1 || ckGrid[i-1][j+1] == 3){
          if (i-2 >= 0 && j+2 < 8){
         if (ckGrid[i-forCal2_blue][j+forCal2_blue] == 0){
           fill(255,0,0,200);
@@ -303,32 +303,52 @@ void selectCk(){
     for(int l = 1; l < height/100; l++){  
       noStroke();
       fill(0,255,0,100);
-      square((j*100)+100*l,(i*100)+100*l,100);
-      square((j*100)+100*l,(i*100)-100*l,100);
-      square((j*100)-100*l,(i*100)+100*l,100);
-      square((j*100)-100*l,(i*100)-100*l,100);
+      if(i+l < 8 && j+l < 8 ){
+       if(ckGrid[i+l][j+l] != 2 && ckGrid[i+l][j+l] != 4){
+        square((j*100)+100*l,(i*100)+100*l,100); // right down
+       }
+      }
       
+      if(i-l >= 0 && j+l < 8){
+       if(ckGrid[i-l][j+l] != 2 && ckGrid[i-l][j+l] != 4){
+        square((j*100)+100*l,(i*100)-100*l,100); // right up
+       }
+      }
+      
+      if( i + l < 8 && j - l >= 0){
+       if(ckGrid[i+l][j-l] != 2 && ckGrid[i+l][j-l] != 4){
+        square((j*100)-100*l,(i*100)+100*l,100); // left down
+       }
+      }
+      
+      if(i - l >= 0 && j - l >= 0){
+       if(ckGrid[i-l][j-l] != 2 && ckGrid[i-l][j-l] != 4 ){
+        square((j*100)-100*l,(i*100)-100*l,100);
+       }
+      }
+      
+      // target
      if(i + l < 8 && j + l < 8){
        fill(255,0,0,200);
-      if(ckGrid[i+l][j+l] == 1){
+      if(ckGrid[i+l][j+l] == 1){ // right down
         square((j*100)+100*l,(i*100)+100*l,100);
       }
      }
      if(i + l < 8 && j - l >= 0){
-      if(ckGrid[i+l][j-l] == 1){
-        
+      if(ckGrid[i+l][j-l] == 1){ // left down
+        fill(255,0,0,200);
         square((j*100)-100*l,(i*100)+100*l,100);
       }
      }
      if(i - l >= 0 && j + l < 8){
-      if(ckGrid[i-l][j+l] == 1){
-        
+      if(ckGrid[i-l][j+l] == 1){ // right up
+        fill(255,0,0,200);
         square((j*100)+100*l,(i*100)-100*l,100);
       }
      }
      if(i - l >= 0 && j - l >= 0){
-      if(ckGrid[i-l][j-l] == 1){
-        
+      if(ckGrid[i-l][j-l] == 1){ // left up
+        fill(255,0,0,200);
         square((j*100)-100*l,(i*100)-100*l,100);
       }
      }
@@ -358,7 +378,7 @@ void selectCk(){
    
    if(i-2 >= 0 && j - 2 >= 0){ 
     if (ckGrid[i-2][j-2] == 1){
-     if(ckGrid[i-1][j-1] == 2){
+     if(ckGrid[i-1][j-1] == 2 || ckGrid[i-1][j-1] == 4){
       ckGrid[i][j] = 1;
       ckGrid[saveCol+1][saveRow+1] = 0;
       ckGrid[saveCol][saveRow] = 0;
@@ -371,7 +391,7 @@ void selectCk(){
    }
    if(i - 2 >= 0 && j + 2 < 8){
    if(ckGrid[i-2][j+2] == 1){
-    if(ckGrid[i-1][j+1] == 2){
+    if(ckGrid[i-1][j+1] == 2 || ckGrid[i-1][j+1] == 4){
      ckGrid[i][j] = 1;
      ckGrid[i-1][j+1] = 0;
      ckGrid[i-2][j+2] = 0;
@@ -414,7 +434,7 @@ void selectCk(){
     }
     if(i + 2 < 8 && j - 2 >= 0){
       if(ckGrid[i+2][j-2] == 2){  //right
-       if(ckGrid[i+1][j-1] == 1){
+       if(ckGrid[i+1][j-1] == 1 || ckGrid[i+1][j-1] == 3){
         ckGrid[i][j] = 2;
         ckGrid[i+1][j-1] = 0;
         ckGrid[i+2][j-2] = 0;
@@ -427,7 +447,7 @@ void selectCk(){
     }
     if( i + 2 < 8 && j + 2 < 8){
      if(ckGrid[i+2][j+2] == 2){
-      if(ckGrid[i+1][j+1] == 1){
+      if(ckGrid[i+1][j+1] == 1 || ckGrid[i+1][j+1] == 3){
        ckGrid[i][j] = 2;
        ckGrid[i+1][j+1] = 0;
        ckGrid[i+2][j+2] = 0;
@@ -587,8 +607,136 @@ void selectCk(){
     
     }
    }
+   
+   //ulti red move
+   
+   if(ckGrid[saveCol][saveRow] == 4){
+     
+    if(ckGrid[i][j] != 1 & ckGrid[i][j] != 3){
+     if(i - saveCol > 0 && j - saveRow > 0){ // right down
+    
+      int l = saveCol;
+      int k = saveRow;
+      while(l < i ){
+       while(k < j){
+        k++; 
+       }
+       l++; 
+      }
+      
+      ckGrid[l][k] = 4;
+      ckGrid[saveCol][saveRow] = 0;
+      isClicked = true;
+      
+      for (int back = saveCol; back <= i ; back++){
+        int n_back = i - back;
+        if(ckGrid[i-n_back][j-n_back] == 1){
+         ckGrid[i-n_back][j-n_back] = 0; 
+         break;
+        }
+       
+      }
+    }
+    if(i - saveCol > 0 && j - saveRow < 0){ // left down
+    
+      int l = saveCol;
+      int k = saveRow;
+      while(l < i ){
+       while(k > j){
+        k --; 
+       }
+       l++; 
+      }
+      ckGrid[l][k] = 4;
+      ckGrid[saveCol][saveRow] = 0;
+      isClicked = true;
+      
+      for (int back = saveCol; back <= i ; back++){
+        int n_back = i - back;
+       
+         if(ckGrid[i-n_back][j+n_back] == 1){
+           ckGrid[i-n_back][j+n_back] = 0;
+           break;
+        
+         }
+        
+      }
+    }
+    
+    if(i - saveCol < 0 && j - saveRow > 0){ // right up
+    
+      int l = saveCol;
+      int k = saveRow;
+      while(l > i ){
+       while(k < j){
+        k ++; 
+       }
+       l--; 
+      }
+      ckGrid[l][k] = 4;
+      ckGrid[saveCol][saveRow] = 0;
+      isClicked = true;
+      
+      for (int back = saveCol; back >= i ; back--){
+        int n_back = back - i;
+  
+        if(ckGrid[i+n_back][j-n_back] == 1){
+         ckGrid[i+n_back][j-n_back] = 0; 
+         break;
+         
+        
+       }
+      
+     }
+    }
+    
+    if(i - saveCol < 0 && j - saveRow < 0){ // left up
+    
+      int l = saveCol;
+      int k = saveRow;
+      while(l > i ){
+       while(k > j){
+        k --; 
+       }
+       l--; 
+      }
+      ckGrid[l][k] = 4;
+      ckGrid[saveCol][saveRow] = 0;
+      isClicked = true;
+      
+      for (int back = saveCol; back >= i ; back--){
+        int n_back = back - i;
+       if(ckGrid[i+n_back][j+n_back] == 1){
+        ckGrid[i+n_back][j+n_back] = 0; 
+        break;
+        
+       }
+      
+     }
+    }
+    
+     
+    
+    }
+   }
  
 }
+
+/*void matchWin(){
+  //redwins
+  
+ for(int i = 0; i < ckGrid.length ; i ++){
+   for(int j = 0; j < ckGrid[0].length; j++){
+     if(ckGrid[i][j] == 2 && ckGrid[i][j] == 4){
+      
+     }
+     j = 0;
+   }
+ }
+ textSize(50);
+ stroke(255,0,0);
+ text("Red wins!",400,400);
+}*/
 
 
 
@@ -598,9 +746,11 @@ void draw(){
   drawBoard();
   drawChecker();
   selectCk(); 
+  //matchWin();
 }
 
 void mousePressed(){
+  
   checkCol = mouseY/100;
   checkRow = mouseX/100;
 
