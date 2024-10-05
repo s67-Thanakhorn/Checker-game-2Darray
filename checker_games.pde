@@ -8,9 +8,11 @@ int[][] ckGrid = {{0,1,0,1,0,1,0,1},
                   {2,0,2,0,2,0,2,0}};
 
 boolean isClicked = false;
-
+boolean restartClicked = false;
 int checkRow,checkCol,saveCol,saveRow,saveColred,saveRowred,saveColblue,saveRowblue;
 String direct ;
+
+int redWins_count,blueWins_count;
 
 void setup(){
  background(0);
@@ -41,8 +43,8 @@ void drawChecker(){
   int col = ckGrid.length;
   noStroke();
   
-  for (int i = 0; i < row; i++){
-    for (int j = 0; j < col; j++){
+  for (int i = 0; i < col; i++){
+    for (int j = 0; j < row; j++){
     if (ckGrid[i][j] == 1){
       noStroke();
      fill(255,0,0); 
@@ -402,10 +404,9 @@ void selectCk(){
     saveColred = i;
     saveRowred = j;
    }
-  }
-  
-  // if red are negative
-  if(i - 2 == saveColred && j - 2 == saveRowred){
+   
+   // if red are negative
+   if(i - 2 == saveColred && j - 2 == saveRowred){
      ckGrid[i-2][j-2] = 0;
      ckGrid[i][j] = 1;
      ckGrid[i-1][j-1] = 0;
@@ -417,6 +418,10 @@ void selectCk(){
      ckGrid[i-1][j+1] = 0;
      isClicked = false;    
   }
+  }
+  
+  
+  
   
    //blue
    if(ckGrid[saveCol][saveRow] == 2){
@@ -458,12 +463,8 @@ void selectCk(){
      saveColblue = i;
      saveRowblue = j;      
     }
-    
-   }
-   
-   //if blue are negative
-   
-   if(i + 2 == saveColblue && j + 2 == saveRowblue ){
+    //if blue are negative
+    if(i + 2 == saveColblue && j + 2 == saveRowblue ){
     ckGrid[i][j] = 2;
     ckGrid[i+1][j+1] = 0;
     ckGrid[i+2][j+2] = 0;
@@ -475,7 +476,12 @@ void selectCk(){
     ckGrid[i+1][j-1] = 0;
     ckGrid[i+2][j-2] = 0;
     isClicked = true;
-   }  
+   }
+   }
+   
+   
+   
+     
   }
   
   if (ckGrid[0][1] == 2){
@@ -722,23 +728,76 @@ void selectCk(){
  
 }
 
-/*void matchWin(){
+void matchWin(){
   //redwins
+ int i = 0;
+ int j = 0;
+
   
- for(int i = 0; i < ckGrid.length ; i ++){
-   for(int j = 0; j < ckGrid[0].length; j++){
-     if(ckGrid[i][j] == 2 && ckGrid[i][j] == 4){
+  for( i = 0 ; i < ckGrid.length  ; i++){
+    
+    for( j = 0 ; j < ckGrid[0].length ; j++){ 
       
+      if(ckGrid[i][j] != 2 && ckGrid[i][j] != 4){        
+        redWins_count ++;   
+
+       if(redWins_count == 64){
+
+        fill(255);
+        rect(0,300,800,200);
+        fill(255,0,0);
+        textSize(150);
+        text("RED WIN!",110,450);
+        restart();
+        
+        redWins_count = 0;
+        noLoop();
+        
+      }
+     }else{
+       
+      redWins_count = 0; 
+     }  
+     
+  //blue win
+      
+     if(ckGrid[i][j] != 1 && ckGrid[i][j] != 3){
+        
+        blueWins_count ++;
+        
+       if(blueWins_count== 64){
+
+        fill(255);
+        rect(0,300,800,200);
+        fill(0,0,255);
+        textSize(150);
+        text("BLUE WIN!",70,450);
+        restart();
+        
+        blueWins_count = 0;
+        noLoop();
+        
+      }
+     }else{
+      blueWins_count = 0; 
      }
-     j = 0;
+    }
    }
- }
- textSize(50);
- stroke(255,0,0);
- text("Red wins!",400,400);
-}*/
+}
 
+void restart(){
+  
+  
+  
+  fill(255);
+  rect(150,525,500,50,10,10,10,10);
+  textSize(40);
+  fill(0);
+  text("press any key to restart",200,560);
+  restartClicked = true;
 
+  
+}
 
 void draw(){
   
@@ -746,13 +805,31 @@ void draw(){
   drawBoard();
   drawChecker();
   selectCk(); 
-  //matchWin();
+  matchWin();
+  
 }
 
 void mousePressed(){
   
+  
   checkCol = mouseY/100;
   checkRow = mouseX/100;
-
   
+  
+  
+}
+
+void keyPressed(){
+  if(restartClicked){
+  loop();
+   ckGrid = new int[][] {{0,1,0,1,0,1,0,1},
+                         {1,0,1,0,1,0,1,0},
+                         {0,0,0,0,0,0,0,0},
+                         {0,0,0,0,0,0,0,0},
+                         {0,0,0,0,0,0,0,0},
+                         {0,0,0,0,0,0,0,0},
+                         {0,2,0,2,0,2,0,2},
+                         {2,0,2,0,2,0,2,0}};
+    restartClicked = false;
+  }
 }
