@@ -1,3 +1,4 @@
+PImage img;
 int[][] ckGrid = {{0,1,0,1,0,1,0,1},
                   {1,0,1,0,1,0,1,0},
                   {0,0,0,0,0,0,0,0},
@@ -13,14 +14,32 @@ int checkRow,checkCol,saveCol,saveRow,saveColred,saveRowred,saveColblue,saveRowb
 String direct ;
 
 int redWins_count,blueWins_count;
+float size=1;
+boolean saveClicked = false;
 
 void setup(){
  background(0);
- size(800,800);
+ size(1100,800);
+ img = loadImage("wood.jpg");
+ 
+ 
+ /*String[] lines = new String[ckGrid.length];
+ 
+ for (int i = 0; i < ckGrid.length; i++) {
+    String[] strRow = new String[ckGrid[i].length];
+    for (int j = 0; j < ckGrid[i].length; j++) {
+      strRow[j] = str(ckGrid[i][j]); 
+    }
+    lines[i] = join(strRow, ", ");
+  }
+
+  saveStrings("output.txt", lines);
+  println("Complete !");*/
  
 }
 
 void drawBoard(){
+  rectMode(CORNER);
   noStroke();
   fill(#A1662F);
  for(int x = 0; x < width; x += 200){
@@ -161,7 +180,7 @@ void selectCk(){
       noStroke();
       square((j*100)-100*l,(i*100)-100*l,100);
       if(i - l >= 0 && j - l >= 0){
-       if(ckGrid[i-l][j-l] == 2){
+       if(ckGrid[i-l][j-l] == 2 ||ckGrid[i-l][j-l] == 4){
         fill(255,0,0,150);
         square((j*100)-100*l,(i*100)-100*l,100);
         
@@ -182,7 +201,7 @@ void selectCk(){
         square((j*100)+100*r,(i*100)-100*r,100); 
       
          if(i - r >= 0 && j + r < 8){
-          if(ckGrid[i-r][j+r] == 2){
+          if(ckGrid[i-r][j+r] == 2 || ckGrid[i-r][j+r] == 4){
         
            fill(255,0,0,150);
            square((j*100)+100*r,(i*100)-100*r,100);
@@ -201,7 +220,7 @@ void selectCk(){
         square((j*100)+100*r,(i*100)+100*r,100); 
       
         if(i + r < 8 && j + r < 8){
-         if(ckGrid[i+r][j+r] == 2){
+         if(ckGrid[i+r][j+r] == 2 || ckGrid[i+r][j+r] == 4){
         
           fill(255,0,0,150);
           square((j*100)+100*r,(i*100)+100*r,100);
@@ -221,7 +240,7 @@ void selectCk(){
        square((j*100)-100*r,(i*100)+100*r,100); 
       
        if(i + r < 8 && j - r >= 0){
-        if(ckGrid[i+r][j-r] == 2){
+        if(ckGrid[i+r][j-r] == 2 || ckGrid[i+r][j-r] == 4){
        
          fill(255,0,0,150);
          square((j*100)-100*r,(i*100)+100*r,100);
@@ -332,24 +351,24 @@ void selectCk(){
       // target
      if(i + l < 8 && j + l < 8){
        fill(255,0,0,200);
-      if(ckGrid[i+l][j+l] == 1){ // right down
+      if(ckGrid[i+l][j+l] == 1 || ckGrid[i+l][j+l] == 3){ // right down
         square((j*100)+100*l,(i*100)+100*l,100);
       }
      }
      if(i + l < 8 && j - l >= 0){
-      if(ckGrid[i+l][j-l] == 1){ // left down
+      if(ckGrid[i+l][j-l] == 1 ||ckGrid[i+l][j-l] == 3){ // left down
         fill(255,0,0,200);
         square((j*100)-100*l,(i*100)+100*l,100);
       }
      }
      if(i - l >= 0 && j + l < 8){
-      if(ckGrid[i-l][j+l] == 1){ // right up
+      if(ckGrid[i-l][j+l] == 1 || ckGrid[i-l][j+l] == 3){ // right up
         fill(255,0,0,200);
         square((j*100)+100*l,(i*100)-100*l,100);
       }
      }
      if(i - l >= 0 && j - l >= 0){
-      if(ckGrid[i-l][j-l] == 1){ // left up
+      if(ckGrid[i-l][j-l] == 1 || ckGrid[i-l][j-l] == 3){ // left up
         fill(255,0,0,200);
         square((j*100)-100*l,(i*100)-100*l,100);
       }
@@ -524,7 +543,7 @@ void selectCk(){
       
       for (int back = saveCol; back <= i ; back++){
         int n_back = i - back;
-        if(ckGrid[i-n_back][j-n_back] == 2){
+        if(ckGrid[i-n_back][j-n_back] == 2 || ckGrid[i-n_back][j-n_back] == 4){
          ckGrid[i-n_back][j-n_back] = 0; 
          break;
         }
@@ -548,7 +567,7 @@ void selectCk(){
       for (int back = saveCol; back <= i ; back++){
         int n_back = i - back;
        
-         if(ckGrid[i-n_back][j+n_back] == 2){
+         if(ckGrid[i-n_back][j+n_back] == 2 || ckGrid[i-n_back][j+n_back] == 4){
            ckGrid[i-n_back][j+n_back] = 0;
            break;
         
@@ -574,7 +593,7 @@ void selectCk(){
       for (int back = saveCol; back >= i ; back--){
         int n_back = back - i;
   
-        if(ckGrid[i+n_back][j-n_back] == 2){
+        if(ckGrid[i+n_back][j-n_back] == 2 || ckGrid[i+n_back][j-n_back] == 4){
          ckGrid[i+n_back][j-n_back] = 0; 
          break;
          
@@ -600,7 +619,7 @@ void selectCk(){
       
       for (int back = saveCol; back >= i ; back--){
         int n_back = back - i;
-       if(ckGrid[i+n_back][j+n_back] == 2){
+       if(ckGrid[i+n_back][j+n_back] == 2 || ckGrid[i+n_back][j+n_back] == 4){
         ckGrid[i+n_back][j+n_back] = 0; 
         break;
         
@@ -614,7 +633,7 @@ void selectCk(){
     }
    }
    
-   //ulti red move
+   //ulti blue move
    
    if(ckGrid[saveCol][saveRow] == 4){
      
@@ -636,7 +655,7 @@ void selectCk(){
       
       for (int back = saveCol; back <= i ; back++){
         int n_back = i - back;
-        if(ckGrid[i-n_back][j-n_back] == 1){
+        if(ckGrid[i-n_back][j-n_back] == 1 || ckGrid[i-n_back][j-n_back] == 3){
          ckGrid[i-n_back][j-n_back] = 0; 
          break;
         }
@@ -660,7 +679,7 @@ void selectCk(){
       for (int back = saveCol; back <= i ; back++){
         int n_back = i - back;
        
-         if(ckGrid[i-n_back][j+n_back] == 1){
+         if(ckGrid[i-n_back][j+n_back] == 1 || ckGrid[i-n_back][j+n_back] == 3){
            ckGrid[i-n_back][j+n_back] = 0;
            break;
         
@@ -686,7 +705,7 @@ void selectCk(){
       for (int back = saveCol; back >= i ; back--){
         int n_back = back - i;
   
-        if(ckGrid[i+n_back][j-n_back] == 1){
+        if(ckGrid[i+n_back][j-n_back] == 1 || ckGrid[i+n_back][j-n_back] == 3){
          ckGrid[i+n_back][j-n_back] = 0; 
          break;
          
@@ -712,7 +731,7 @@ void selectCk(){
       
       for (int back = saveCol; back >= i ; back--){
         int n_back = back - i;
-       if(ckGrid[i+n_back][j+n_back] == 1){
+       if(ckGrid[i+n_back][j+n_back] == 1 || ckGrid[i+n_back][j+n_back] == 3){
         ckGrid[i+n_back][j+n_back] = 0; 
         break;
         
@@ -741,8 +760,8 @@ void matchWin(){
       if(ckGrid[i][j] != 2 && ckGrid[i][j] != 4){        
         redWins_count ++;   
 
-       if(redWins_count == 64){
-
+       if(redWins_count > 100){
+        noStroke();  
         fill(255);
         rect(0,300,800,200);
         fill(255,0,0);
@@ -765,8 +784,8 @@ void matchWin(){
         
         blueWins_count ++;
         
-       if(blueWins_count== 64){
-
+       if(blueWins_count > 100){
+        noStroke();
         fill(255);
         rect(0,300,800,200);
         fill(0,0,255);
@@ -788,7 +807,7 @@ void matchWin(){
 void restart(){
   
   
-  
+  noStroke();
   fill(255);
   rect(150,525,500,50,10,10,10,10);
   textSize(40);
@@ -799,27 +818,86 @@ void restart(){
   
 }
 
+void showTurn(){
+  
+ noStroke();
+ image(img,800,0,500,800);
+ textSize(70);
+ if(isClicked){
+   fill(255,255,255,150);
+   rect(800,300,300,150);
+   fill(255,0,0);
+   text("Red turn",830,400);
+ }else{
+   fill(255,255,255,150);
+   rect(800,300,300,150);
+   fill(0,0,255);
+   text("Blue turn",820,400);
+   
+ } 
+}
+
+void saveGame(){
+   rectMode(CENTER);
+   fill(255,255,255);
+   rect(950,670,200*size,50*size,10,10,10,10);
+   fill(0);
+   textSize(40);
+   text("save game",860,675);
+   
+   rectMode(CORNER);
+   if(mouseX >= 850 && mouseY >= 640 && mouseX <= 1080 &&  mouseY <= 690  ){
+    size = 1.1;
+     
+   }else{
+    size = 1; 
+   }
+   
+   if(saveClicked){
+    fill(255,0,0);
+    textSize(30);
+    text("Not found!",880,740);
+      
+     
+   }
+   
+  
+   
+  
+}
+
 void draw(){
   
   background(0);
+  
   drawBoard();
   drawChecker();
   selectCk(); 
   matchWin();
+  showTurn();
+  saveGame();
   
 }
 
 void mousePressed(){
-  
-  
+  println(mouseX,mouseY);
+  if(mouseX >= 800 || saveClicked){
+   
+  }else{
   checkCol = mouseY/100;
   checkRow = mouseX/100;
+  }
   
-  
-  
+  if(mouseX >= 850 && mouseY >= 640 && mouseX <= 1080 &&  mouseY <= 690  ){
+    saveClicked = true;   
+  }
+ 
 }
 
+
+
 void keyPressed(){
+  
   if(restartClicked){
   loop();
    ckGrid = new int[][] {{0,1,0,1,0,1,0,1},
