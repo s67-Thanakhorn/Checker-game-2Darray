@@ -14,27 +14,15 @@ int checkRow,checkCol,saveCol,saveRow,saveColred,saveRowred,saveColblue,saveRowb
 String direct ;
 
 int redWins_count,blueWins_count;
-float size=1;
+float sizeSave = 1;
+float sizeLoad = 1;
 boolean saveClicked = false;
+boolean loadClicked = false;
 
 void setup(){
  background(0);
  size(1100,800);
  img = loadImage("wood.jpg");
- 
- 
- /*String[] lines = new String[ckGrid.length];
- 
- for (int i = 0; i < ckGrid.length; i++) {
-    String[] strRow = new String[ckGrid[i].length];
-    for (int j = 0; j < ckGrid[i].length; j++) {
-      strRow[j] = str(ckGrid[i][j]); 
-    }
-    lines[i] = join(strRow, ", ");
-  }
-
-  saveStrings("output.txt", lines);
-  println("Complete !");*/
  
 }
 
@@ -439,9 +427,7 @@ void selectCk(){
   }
   }
   
-  
-  
-  
+   
    //blue
    if(ckGrid[saveCol][saveRow] == 2){
     if(saveCol - 1 == i && saveRow - 1 == j){
@@ -495,12 +481,8 @@ void selectCk(){
     ckGrid[i+1][j-1] = 0;
     ckGrid[i+2][j-2] = 0;
     isClicked = true;
-   }
-   }
-   
-   
-   
-     
+    }
+   }    
   }
   
   if (ckGrid[0][1] == 2){
@@ -625,11 +607,8 @@ void selectCk(){
         
        }
       
-     }
-    }
-    
-     
-    
+      }
+     } 
     }
    }
    
@@ -737,11 +716,8 @@ void selectCk(){
         
        }
       
+      }
      }
-    }
-    
-     
-    
     }
    }
  
@@ -840,29 +816,75 @@ void showTurn(){
 void saveGame(){
    rectMode(CENTER);
    fill(255,255,255);
-   rect(950,670,200*size,50*size,10,10,10,10);
+   rect(950,590,200*sizeSave,50*sizeSave,10,10,10,10);
    fill(0);
    textSize(40);
-   text("save game",860,675);
+   text("save game",860,600);
+   
+   fill(255,255,255);
+   rect(950,670,200*sizeLoad,50*sizeLoad,10,10,10,10);
+   fill(0);
+   textSize(40);
+   text("load game",860,680);
    
    rectMode(CORNER);
-   if(mouseX >= 850 && mouseY >= 640 && mouseX <= 1080 &&  mouseY <= 690  ){
-    size = 1.1;
+   // save button zone
+   if(mouseX >= 850 && mouseY >= 565 && mouseX <= 1050 &&  mouseY <= 615  ){
+    sizeSave = 1.1;
      
    }else{
-    size = 1; 
+    sizeSave = 1; 
    }
-   
    if(saveClicked){
-    fill(255,0,0);
-    textSize(30);
-    text("Not found!",880,740);
-      
-     
+    
+    String[] lines = new String[ckGrid.length];
+ 
+     for (int i = 0; i < ckGrid.length; i++) {
+        String[] strRow = new String[ckGrid[i].length];
+       for (int j = 0; j < ckGrid[i].length; j++) {
+         strRow[j] = str(ckGrid[i][j]); 
+      }
+      lines[i] = join(strRow, " ");
+    }
+
+    saveStrings("save.txt", lines);
+    
+    String[] booleanString = {Boolean.toString(isClicked)};
+    saveStrings("booleanValue.txt", booleanString);
+    
+    saveClicked = false;
+    
+    
+    
    }
    
-  
    
+   // load button zone
+   
+   if(mouseX >= 850 && mouseY >= 640 && mouseX <= 1080 &&  mouseY <= 690  ){
+    sizeLoad = 1.1;
+     
+   }else{
+    sizeLoad = 1; 
+   }
+   
+   if(loadClicked){
+     
+     String[] lines = loadStrings("save.txt");
+        for (int i = 0; i < lines.length; i++) {
+           String[] values = split(lines[i], ' ');
+        for (int j = 0; j < values.length; j++) {
+            ckGrid[i][j] = int(values[j]);
+      }
+    }
+     
+    String[] loadString = loadStrings("booleanValue.txt");
+    boolean loadBoolean = Boolean.parseBoolean(loadString[0]);
+    isClicked = loadBoolean;
+    println(loadBoolean,isClicked);
+    
+    loadClicked = false;
+   }
   
 }
 
@@ -880,7 +902,7 @@ void draw(){
 }
 
 void mousePressed(){
-  println(mouseX,mouseY);
+  //println(mouseX,mouseY);
   if(mouseX >= 800 || saveClicked){
    
   }else{
@@ -888,13 +910,15 @@ void mousePressed(){
   checkRow = mouseX/100;
   }
   
-  if(mouseX >= 850 && mouseY >= 640 && mouseX <= 1080 &&  mouseY <= 690  ){
+  if(mouseX >= 850 && mouseY >= 565 && mouseX <= 1050 &&  mouseY <= 615  ){
     saveClicked = true;   
+  }
+  
+  if(mouseX >= 850 && mouseY >= 640 && mouseX <= 1080 &&  mouseY <= 690  ){
+   loadClicked = true; 
   }
  
 }
-
-
 
 void keyPressed(){
   
