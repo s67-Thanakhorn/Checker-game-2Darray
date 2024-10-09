@@ -8,16 +8,18 @@ int[][] ckGrid = {{0,1,0,1,0,1,0,1},
                   {0,2,0,2,0,2,0,2},
                   {2,0,2,0,2,0,2,0}};
 
-boolean isClicked = false;
+boolean turn = false;
 boolean restartClicked = false;
 int checkRow,checkCol,saveCol,saveRow,saveColred,saveRowred,saveColblue,saveRowblue;
-String direct ;
 
 int redWins_count,blueWins_count;
 float sizeSave = 1;
 float sizeLoad = 1;
 boolean saveClicked = false;
 boolean loadClicked = false;
+
+boolean eatStreaks_right = false;
+boolean eatStreaks_left = false;
 
 void setup(){
  background(0);
@@ -89,7 +91,7 @@ void selectCk(){
   int forCal2_blue = 2;
   
   //red zone
-  if(isClicked){
+  if(turn){
     
   if (ckGrid[i][j] == 1){
    saveCol = i;
@@ -105,10 +107,14 @@ void selectCk(){
    
    if (i+1 < 8 && j-1 >= 0){
      
-     if (ckGrid[i+1][j-1] == 0){
-       square((j*100)-100,(i*100)+100,100);
+     if(eatStreaks_right == false){
        
-     }else{
+     if (ckGrid[i+1][j-1] == 0){ // left down
+       square((j*100)-100,(i*100)+100,100);
+     
+       
+     }
+    }
        
       if (ckGrid[i+1][j-1] == 2 || ckGrid[i+1][j-1] == 4){                      
          if (i + 2 < 8 && j - 2 >= 0){
@@ -122,14 +128,17 @@ void selectCk(){
           }
          }
         }
-     }
+     
    }
 
    if (j+1 < 8 && i+1 < 8){
-    if (ckGrid[i+1][j+1] == 0){
-     square((j*100)+100,(i*100)+100,100);
+     
+    if(eatStreaks_left == false){
+     if (ckGrid[i+1][j+1] == 0){// right down
+      square((j*100)+100,(i*100)+100,100);
       
-     }else{
+      }
+     }
       
         if (ckGrid[i+1][j+1] == 2 || ckGrid[i+1][j+1] == 4){
           if (i+2 < 8 && j+2 < 8){
@@ -143,8 +152,7 @@ void selectCk(){
            forCal2_red = 1; 
           }
          }
-       }
-     
+       
     }
    }
    
@@ -256,10 +264,13 @@ void selectCk(){
    fill(0,255,0,100);
    
    if(j-1 >= 0 && i-1 >= 0){
-     if (ckGrid[i-1][j-1] == 0){
+     if(eatStreaks_right == false){
+       
+     if (ckGrid[i-1][j-1] == 0){ //top left
       square((j*100)-100,(i*100)-100,100);
     
-     }else{
+     }
+     }
        if (ckGrid[i-1][j-1] == 1|| ckGrid[i-1][j-1] == 3){
          
         if (i-2 >= 0 && j-2 >= 0){
@@ -273,14 +284,16 @@ void selectCk(){
          forCal2_blue = 1; 
         }
        }
-       
-     }
+      
    }
    if (j+1 < 8 && i-1 >= 0){
-     if (ckGrid[i-1][j+1] == 0){
+    
+    if(eatStreaks_left == false){
+     if (ckGrid[i-1][j+1] == 0){//top right
       square((j*100)+100,(i*100)-100,100);
       
-     }else{
+     }
+     }
        if (ckGrid[i-1][j+1] == 1 || ckGrid[i-1][j+1] == 3){
          if (i-2 >= 0 && j+2 < 8){
         if (ckGrid[i-forCal2_blue][j+forCal2_blue] == 0){
@@ -294,7 +307,7 @@ void selectCk(){
          }
        }
        
-     }
+     
     } 
    }
    
@@ -367,121 +380,155 @@ void selectCk(){
    
   }
   
-  
+  // move and eat
   if (ckGrid[i][j] == 0){
   
-   if(ckGrid[saveCol][saveRow] == 1){
-    if(saveCol + 1 == i && saveRow + 1 == j){
-     ckGrid[i][j] = 1;
-     ckGrid[saveCol][saveRow] = 0;
-     isClicked = false;
-
+    //red move
+   
+   if(ckGrid[saveCol][saveRow] == 1){ 
+     
+    if(eatStreaks_left == false){
+     if(saveCol + 1 == i && saveRow + 1 == j){ // right down
+      ckGrid[i][j] = 1;
+      ckGrid[saveCol][saveRow] = 0;
+      turn = false;
+     
+     }
     }
-    if(saveCol + 1 == i && saveRow - 1 == j){
-     ckGrid[i][j] = 1;
-     ckGrid[saveCol][saveRow] = 0;
-     isClicked = false;
+    
+    if(eatStreaks_right == false){
+     if(saveCol + 1 == i && saveRow - 1 == j){ //left down
+      ckGrid[i][j] = 1;
+      ckGrid[saveCol][saveRow] = 0;
+      turn = false;
+     }
     }
     
     //red eat
    
    if(i-2 >= 0 && j - 2 >= 0){ 
-    if (ckGrid[i-2][j-2] == 1){
+    if (ckGrid[i-2][j-2] == 1){ // right down
      if(ckGrid[i-1][j-1] == 2 || ckGrid[i-1][j-1] == 4){
       ckGrid[i][j] = 1;
       ckGrid[saveCol+1][saveRow+1] = 0;
       ckGrid[saveCol][saveRow] = 0;
-      isClicked = false;
+      turn = false;
+      
+      //eat Streaks right down
+      if(i+1 < 8 && j+1 < 8 && i+2 <8 && j+2 < 8){ //error protect
+      if(ckGrid[i+1][j+1] == 2 || ckGrid[i+1][j+1] == 4){
+        eatStreaks_right = true;
+       if(ckGrid[i+2][j+2] == 0){
+           turn = true;
+           
+         }
+        }
+      }else{
+         turn = false;
+         eatStreaks_right = false;
+        
+       }
      }
     }
-   }else{
-    saveColred = i;
-    saveRowred = j;
    }
+   
    if(i - 2 >= 0 && j + 2 < 8){
-   if(ckGrid[i-2][j+2] == 1){
+   if(ckGrid[i-2][j+2] == 1){ // left down
     if(ckGrid[i-1][j+1] == 2 || ckGrid[i-1][j+1] == 4){
      ckGrid[i][j] = 1;
      ckGrid[i-1][j+1] = 0;
      ckGrid[i-2][j+2] = 0;
-     isClicked = false;
+     turn = false;
+     
+     //eat Streaks left down
+    if(i+1 < 8 && j-1 >= 0 && j-2 >= 0){ //error protect
+      if(ckGrid[i+1][j-1] == 2 || ckGrid[i+1][j-1] == 4){
+        eatStreaks_left = true;
+       if(ckGrid[i+2][j-2] == 0){
+          turn = true;
+          
+         }
+        }
+      }else{
+         turn = false;
+         eatStreaks_left = false;
+         
+       }
      }
     }
-   }else{
-    saveColred = i;
-    saveRowred = j;
    }
-   
-   // if red are negative
-   if(i - 2 == saveColred && j - 2 == saveRowred){
-     ckGrid[i-2][j-2] = 0;
-     ckGrid[i][j] = 1;
-     ckGrid[i-1][j-1] = 0;
-     isClicked = false;
-   }
-  if(i-2 == saveColred && j + 2 == saveRowred){
-     ckGrid[i-2][j+2] = 0;
-     ckGrid[i][j] = 1;
-     ckGrid[i-1][j+1] = 0;
-     isClicked = false;    
+    
   }
-  }
-  
    
    //blue
    if(ckGrid[saveCol][saveRow] == 2){
     if(saveCol - 1 == i && saveRow - 1 == j){
      ckGrid[i][j] = 2;
      ckGrid[saveCol][saveRow] = 0;
-     isClicked = true;
+     turn = true;
 
     }
     if(saveCol - 1 == i && saveRow + 1 == j){
      ckGrid[i][j] = 2;
      ckGrid[saveCol][saveRow] = 0;
-     isClicked = true;
+     turn = true;
 
     }
     if(i + 2 < 8 && j - 2 >= 0){
-      if(ckGrid[i+2][j-2] == 2){  //right
+      if(ckGrid[i+2][j-2] == 2){  //top right
        if(ckGrid[i+1][j-1] == 1 || ckGrid[i+1][j-1] == 3){
         ckGrid[i][j] = 2;
         ckGrid[i+1][j-1] = 0;
         ckGrid[i+2][j-2] = 0;
-        isClicked = true;
+        turn = true;
+        
+         //eat Streaks top right
+        if(i-1 >= 0 && j+1 < 8 && i-2 >= 0 && j+2 < 8){ //error protect
+         if(ckGrid[i-1][j+1] == 1 || ckGrid[i-1][j+1] == 3){
+          if(ckGrid[i-2][j+2] == 0){
+            turn = false; 
+            eatStreaks_right = true;
+          }
+         }
+        }else{
+         turn = true; 
+         eatStreaks_right = false;
+        }
+        
+        
       }
      }
-    }else{
-     saveColblue = i;
-     saveRowblue = j;
     }
+    
     if( i + 2 < 8 && j + 2 < 8){
-     if(ckGrid[i+2][j+2] == 2){
+     if(ckGrid[i+2][j+2] == 2){ // top left
       if(ckGrid[i+1][j+1] == 1 || ckGrid[i+1][j+1] == 3){
        ckGrid[i][j] = 2;
        ckGrid[i+1][j+1] = 0;
        ckGrid[i+2][j+2] = 0;
-       isClicked = true;
+       turn = true;
+       
+       //eat Streaks top left
+        if(i-1 >= 0 && j-1 >= 0 && i-2 >= 0 && j-2 >= 0){ //error protect
+         if(ckGrid[i-1][j-1] == 1 || ckGrid[i-1][j-1] == 3){
+          if(ckGrid[i-2][j-2] == 0){
+            turn = false;
+            eatStreaks_left = true;
+            
+          }
+         }
+        }else{
+         turn = true;
+         eatStreaks_left = false;
+      }
+       
+       
       }
      }
-    }else{
-     saveColblue = i;
-     saveRowblue = j;      
     }
-    //if blue are negative
-    if(i + 2 == saveColblue && j + 2 == saveRowblue ){
-    ckGrid[i][j] = 2;
-    ckGrid[i+1][j+1] = 0;
-    ckGrid[i+2][j+2] = 0;
-    isClicked = true;
-   }
    
-   if(i + 2 == saveColblue && j - 2 == saveRowblue){
-    ckGrid[i][j] = 2;
-    ckGrid[i+1][j-1] = 0;
-    ckGrid[i+2][j-2] = 0;
-    isClicked = true;
-    }
+        
+   
    }    
   }
   
@@ -521,7 +568,7 @@ void selectCk(){
       
       ckGrid[l][k] = 3;
       ckGrid[saveCol][saveRow] = 0;
-      isClicked = false;
+      turn = false;
       
       for (int back = saveCol; back <= i ; back++){
         int n_back = i - back;
@@ -544,7 +591,7 @@ void selectCk(){
       }
       ckGrid[l][k] = 3;
       ckGrid[saveCol][saveRow] = 0;
-      isClicked = false;
+      turn = false;
       
       for (int back = saveCol; back <= i ; back++){
         int n_back = i - back;
@@ -570,7 +617,7 @@ void selectCk(){
       }
       ckGrid[l][k] = 3;
       ckGrid[saveCol][saveRow] = 0;
-      isClicked = false;
+      turn = false;
       
       for (int back = saveCol; back >= i ; back--){
         int n_back = back - i;
@@ -597,7 +644,7 @@ void selectCk(){
       }
       ckGrid[l][k] = 3;
       ckGrid[saveCol][saveRow] = 0;
-      isClicked = false;
+      turn = false;
       
       for (int back = saveCol; back >= i ; back--){
         int n_back = back - i;
@@ -630,7 +677,7 @@ void selectCk(){
       
       ckGrid[l][k] = 4;
       ckGrid[saveCol][saveRow] = 0;
-      isClicked = true;
+      turn = true;
       
       for (int back = saveCol; back <= i ; back++){
         int n_back = i - back;
@@ -653,7 +700,7 @@ void selectCk(){
       }
       ckGrid[l][k] = 4;
       ckGrid[saveCol][saveRow] = 0;
-      isClicked = true;
+      turn = true;
       
       for (int back = saveCol; back <= i ; back++){
         int n_back = i - back;
@@ -679,7 +726,7 @@ void selectCk(){
       }
       ckGrid[l][k] = 4;
       ckGrid[saveCol][saveRow] = 0;
-      isClicked = true;
+      turn = true;
       
       for (int back = saveCol; back >= i ; back--){
         int n_back = back - i;
@@ -706,7 +753,7 @@ void selectCk(){
       }
       ckGrid[l][k] = 4;
       ckGrid[saveCol][saveRow] = 0;
-      isClicked = true;
+      turn = true;
       
       for (int back = saveCol; back >= i ; back--){
         int n_back = back - i;
@@ -716,8 +763,11 @@ void selectCk(){
         
        }
       
-      }
      }
+    }
+    
+     
+    
     }
    }
  
@@ -799,7 +849,7 @@ void showTurn(){
  noStroke();
  image(img,800,0,500,800);
  textSize(70);
- if(isClicked){
+ if(turn){
    fill(255,255,255,150);
    rect(800,300,300,150);
    fill(255,0,0);
@@ -849,7 +899,7 @@ void saveGame(){
 
     saveStrings("save.txt", lines);
     
-    String[] booleanString = {Boolean.toString(isClicked)};
+    String[] booleanString = {Boolean.toString(turn)};
     saveStrings("booleanValue.txt", booleanString);
     
     saveClicked = false;
@@ -880,8 +930,8 @@ void saveGame(){
      
     String[] loadString = loadStrings("booleanValue.txt");
     boolean loadBoolean = Boolean.parseBoolean(loadString[0]);
-    isClicked = loadBoolean;
-    println(loadBoolean,isClicked);
+    turn = loadBoolean;
+    println(loadBoolean,turn);
     
     loadClicked = false;
    }
@@ -919,6 +969,8 @@ void mousePressed(){
   }
  
 }
+
+
 
 void keyPressed(){
   
