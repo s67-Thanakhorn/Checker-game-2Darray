@@ -179,7 +179,7 @@ void selectCk(){
       noStroke();
       square((j*100)-100*l,(i*100)-100*l,100);
       
-      if(i - l >= 0 && j - l >= 0){
+      if(i - l >= 0 && j - l >= 0 && i-(l+1) >= 0 && j-(l+1) >= 0){
         
        if(ckGrid[i-l][j-l] == 2 ||ckGrid[i-l][j-l] == 4){
          
@@ -211,7 +211,7 @@ void selectCk(){
         fill(0,255,0,100);
         square((j*100)+100*r,(i*100)-100*r,100); 
       
-         if(i - r >= 0 && j + r < 8){
+         if(i - r >= 0 && j + r < 8 && i-(r+1) >= 0 && j+(r+1) < 8){
           if(ckGrid[i-r][j+r] == 2 || ckGrid[i-r][j+r] == 4){
         
            fill(255,0,0,150);
@@ -238,7 +238,7 @@ void selectCk(){
         fill(0,255,0,100);
         square((j*100)+100*r,(i*100)+100*r,100); 
       
-        if(i + r < 8 && j + r < 8){
+        if(i + r < 8 && j + r < 8 && i+(r+1) < 8 && j+(r+1) < 8){
          if(ckGrid[i+r][j+r] == 2 || ckGrid[i+r][j+r] == 4){
         
           fill(255,0,0,150);
@@ -266,7 +266,7 @@ void selectCk(){
        fill(0,255,0,100);
        square((j*100)-100*r,(i*100)+100*r,100); 
       
-       if(i + r < 8 && j - r >= 0){
+       if(i + r < 8 && j - r >= 0 && i+(r+1) < 8 && j-(r+1) >= 0){
         if(ckGrid[i+r][j-r] == 2 || ckGrid[i+r][j-r] == 4){
        
          fill(255,0,0,150);
@@ -371,7 +371,7 @@ void selectCk(){
       noStroke();
       square((j*100)-100*l,(i*100)-100*l,100);
       
-      if(i - l >= 0 && j - l >= 0){
+      if(i - l >= 0 && j - l >= 0 && i-(l+1) >= 0 && j-(l+1) >= 0){
         
        if(ckGrid[i-l][j-l] == 1 ||ckGrid[i-l][j-l] == 3){
          
@@ -403,7 +403,7 @@ void selectCk(){
         fill(0,255,0,100);
         square((j*100)+100*r,(i*100)-100*r,100); 
       
-         if(i - r >= 0 && j + r < 8){
+         if(i - r >= 0 && j + r < 8 && i-(r+1) >= 0 && j+(r+1) < 8){
           if(ckGrid[i-r][j+r] == 1 || ckGrid[i-r][j+r] == 3){
         
            fill(255,0,0,150);
@@ -430,7 +430,7 @@ void selectCk(){
         fill(0,255,0,100);
         square((j*100)+100*r,(i*100)+100*r,100); 
       
-        if(i + r < 8 && j + r < 8){
+        if(i + r < 8 && j + r < 8 && i+(r+1) < 8 && j+(r+1) < 8){
          if(ckGrid[i+r][j+r] == 1 || ckGrid[i+r][j+r] == 3){
         
           fill(255,0,0,150);
@@ -458,7 +458,7 @@ void selectCk(){
        fill(0,255,0,100);
        square((j*100)-100*r,(i*100)+100*r,100); 
       
-       if(i + r < 8 && j - r >= 0){
+       if(i + r < 8 && j - r >= 0 && i+(r+1) < 8 && j-(r+1) >= 0){
         if(ckGrid[i+r][j-r] == 1 || ckGrid[i+r][j-r] == 3){
        
          fill(255,0,0,150);
@@ -654,7 +654,7 @@ void selectCk(){
    ckGrid[7][6] = 3; 
   }
   
-  //ulti red move
+  //ulti red move and eat
   if(ckGrid[saveCol][saveRow] == 3){
    if(ckGrid[i][j] != 2 & ckGrid[i][j] != 4){
     if(i - saveCol > 0 && j - saveRow > 0){ // right down
@@ -761,7 +761,7 @@ void selectCk(){
     }
    }
    
-   //ulti blue move
+   //ulti blue move and eat
    
    if(ckGrid[saveCol][saveRow] == 4){
      
